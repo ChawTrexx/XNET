@@ -1,0 +1,701 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teen18: Join Group Chat</title>
+
+  <meta name="clckd" content="fb60dd9bafbb62f5d0ead0a70eee12c1" />
+  <meta name="eroads_" content="84422ecf6d4c4ca459b67f8216db83f7" />
+  <meta name="248598ff630c59c081b53e6abb0902b332c0976d" content="248598ff630c59c081b53e6abb0902b332c0976d" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+  <meta name="monetag" content="badf72096d16919f0cc886f15f0a90e3">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e90ff">
+  <link rel="icon" href="teen18.png">
+
+  <meta property="og:title" content="Video Title Here" />
+  <meta property="og:description" content="Watch this video on Teen18" />
+  <meta property="og:image" content="THUMBNAIL_URL_HERE" />
+  <meta property="og:type" content="video.other" />
+  <meta property="og:url" content="YOUR_WATCH_URL" />
+
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --card:#141414;
+      --muted:#9a9a9a;
+      --accent:#5b4dff
+    }
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+      background:var(--bg);
+      color:#fff
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 18px;
+      border-bottom:1px solid rgba(255,255,255,0.04)
+    }
+
+    .logo{
+      font-weight:800;
+      color:var(--accent);
+      letter-spacing:2px
+    }
+
+    .controls{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      padding:12px;
+      justify-content:center
+    }
+
+    .chip{
+      background:rgba(255,255,255,0.03);
+      padding:6px 12px;
+      border-radius:20px;
+      cursor:pointer;
+      font-size:14px;
+      border:1px solid rgba(255,255,255,0.02)
+    }
+
+    .chip.active{
+      background:linear-gradient(90deg,var(--accent),#8a6bff);
+      color:#fff
+    }
+
+    .container{
+      max-width:900px;
+      margin:18px auto;
+      padding:0 12px
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      padding:12px;
+      overflow:hidden;
+      margin-bottom:14px
+    }
+
+    .meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:10px;
+      gap:10px
+    }
+
+    .title{
+      font-size:16px;
+      font-weight:600
+    }
+
+    .views{
+      color:var(--muted);
+      font-size:13px;
+      white-space:nowrap
+    }
+
+    .thumb-container{
+      width:100%;
+      height:260px;
+      position:relative;
+      overflow:hidden;
+      border-radius:12px;
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center
+    }
+
+    .thumb-bg{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:blur(5px) brightness(0.6);
+      transform:scale(1.1);
+      z-index:1
+    }
+
+    .thumb-main{
+      position:relative;
+      z-index:2;
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      transition:transform 0.3s ease
+    }
+
+    .card:hover .thumb-main{
+      transform:scale(1.15)
+    }
+
+    @media(max-width:700px){
+      .thumb-container{
+        height:200px
+      }
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:10px
+    }
+
+    button{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      padding:8px 14px;
+      border-radius:10px;
+      color:#fff;
+      cursor:pointer;
+      font-size:14px
+    }
+
+    button.primary{
+      background:var(--accent);
+      border:0
+    }
+
+    .pagination{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:14px;
+      margin:25px 0
+    }
+
+    .pagination button{
+      background:#1c1c1c;
+      border:1px solid rgba(255,255,255,0.08);
+      padding:10px 18px;
+      border-radius:30px;
+      cursor:pointer;
+      font-size:15px;
+      color:#fff;
+      transition:.25s
+    }
+
+    .pagination button:hover{
+      background:linear-gradient(90deg,#6b5cff,#8e79ff);
+      transform:scale(1.05);
+      box-shadow:0 0 12px rgba(108,74,255,0.6)
+    }
+
+    .pagination button:disabled{
+      opacity:.4;
+      cursor:not-allowed;
+      background:#111
+    }
+
+    .page-info{
+      font-size:15px;
+      color:#b1a9ff;
+      font-weight:600;
+      background:#1a1a1a;
+      padding:8px 16px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.05);
+      box-shadow:0 0 5px rgba(92,73,255,0.3)
+    }
+
+    .no-select{
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+      -webkit-touch-callout:none
+    }
+  </style>
+</head>
+
+<body class="no-select">
+
+<header>
+  <div class="logo">TEEN18 APP</div>
+</header>
+
+<div class="controls">
+  <div class="chip active" data-filter="recent">Recent</div>
+  <div class="chip" data-filter="trending">Trending</div>
+  <div class="chip" data-filter="oldest">Oldest</div>
+</div>
+
+<main class="container" id="list"></main>
+<div id="pagination"></div>
+
+<!-- VIDEO ADS -->
+
+<script>
+(function(oxb){
+  var d=document,
+      s=d.createElement('script'),
+      l=d.scripts[d.scripts.length-1];
+
+  s.settings=oxb||{};
+  s.src="//bogustrouble.com/bOXfVIs.dEGel/0yYMW/cd/Eesmx9VuvZEUNlJkGPWTAYc3/MzTfI/z/N/jugPt/NTjRc_xNMJjgMk2cOQQp";
+  s.async=true;
+  s.referrerPolicy='no-referrer-when-downgrade';
+
+  l.parentNode.insertBefore(s,l);
+})({})
+</script>
+
+<script type="module">
+
+const SUPABASE_URL = "https://emhnjxzenbxsaxdpzltf.supabase.co";
+
+const API_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+let VIDEOS = [];
+let SERIES = [];
+
+let currentPage = 1;
+
+const ITEMS_PER_PAGE = 30;
+
+const list = document.getElementById("list");
+const pagination = document.getElementById("pagination");
+
+
+// HTML ESCAPE
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+// IMAGE URL
+
+function safeImage(url){
+  try{
+    const parsed = new URL(url);
+    if(parsed.protocol === "https:" || parsed.protocol === "http:"){
+      return parsed.href;
+    }
+  }catch(e){}
+
+  return "";
+}
+
+
+// =====================================
+// GROUP VIDEOS INTO SERIES
+// =====================================
+
+function groupSeries(){
+
+  const groups = {};
+
+  VIDEOS.forEach(video => {
+
+    // Series title available in new database
+    const seriesName = (
+      video.series_title ||
+      video.title ||
+      "Untitled"
+    ).trim();
+
+    if(!groups[seriesName]){
+      groups[seriesName] = {
+        series_title: seriesName,
+        episodes: [],
+        total_views: 0,
+        latest_date: 0,
+        oldest_date: Infinity
+      };
+    }
+
+    const group = groups[seriesName];
+
+    group.episodes.push(video);
+
+    group.total_views += Number(video.views || 0);
+
+    const date = new Date(video.created_at).getTime() || 0;
+
+    group.latest_date = Math.max(group.latest_date,date);
+
+    group.oldest_date = Math.min(group.oldest_date,date);
+
+  });
+
+
+  SERIES = Object.values(groups).map(group => {
+
+    // Episode number ke according sorting
+    group.episodes.sort((a,b) => {
+
+      const epA = Number(a.episode_number || 999999);
+      const epB = Number(b.episode_number || 999999);
+
+      return epA - epB;
+
+    });
+
+
+    // First episode select
+    let firstEpisode = group.episodes.find(
+      ep => Number(ep.episode_number) === 1
+    );
+
+    // Legacy videos without episode_number
+    if(!firstEpisode){
+      firstEpisode = group.episodes[0];
+    }
+
+    return {
+      ...group,
+      firstEpisode: firstEpisode
+    };
+
+  });
+
+}
+
+
+// =====================================
+// FETCH FROM SUPABASE
+// =====================================
+
+async function fetchVideos(){
+
+  list.innerHTML = "<p>Loading videos...</p>";
+
+  try{
+
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc&limit=1000`,
+      {
+        headers:{
+          "apikey":API_KEY,
+          "Authorization":`Bearer ${API_KEY}`
+        }
+      }
+    );
+
+    if(!res.ok){
+      throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+
+    VIDEOS = data;
+
+    groupSeries();
+
+    currentPage = 1;
+
+    render("recent");
+
+  }catch(error){
+
+    console.error("Supabase Error:",error);
+
+    list.innerHTML = "<p>Unable to load videos. Please try again.</p>";
+
+  }
+
+}
+
+
+// =====================================
+// SHARE SERIES
+// =====================================
+
+window.shareVideo = async function(seriesName){
+
+  const series = SERIES.find(
+    s => s.series_title === seriesName
+  );
+
+  if(!series || !series.firstEpisode){
+    return alert("Video not found!");
+  }
+
+  const video = series.firstEpisode;
+
+  const url = `${window.location.origin}/Watch.html?id=${video.id}`;
+
+  const title = series.series_title;
+
+  const shareData = {
+    title:title,
+    text:`${title}\n${url}`
+  };
+
+  try{
+
+    if(navigator.share){
+
+      await navigator.share(shareData);
+
+    }else{
+
+      prompt("Copy Link:",url);
+
+    }
+
+  }catch(error){
+
+    if(error.name !== "AbortError"){
+      prompt("Copy Link:",url);
+    }
+
+  }
+
+};
+
+
+// =====================================
+// RENDER SERIES
+// =====================================
+
+function render(filter="recent"){
+
+  let items = [...SERIES];
+
+
+  // RECENT
+  if(filter === "recent"){
+
+    items.sort((a,b) => b.latest_date - a.latest_date);
+
+  }
+
+  // TRENDING
+  else if(filter === "trending"){
+
+    items.sort((a,b) => b.total_views - a.total_views);
+
+  }
+
+  // OLDEST
+  else if(filter === "oldest"){
+
+    items.sort((a,b) => a.oldest_date - b.oldest_date);
+
+  }
+
+
+  // PAGINATION
+
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+
+  const safeTotalPages = Math.max(1,totalPages);
+
+  if(currentPage > safeTotalPages){
+    currentPage = safeTotalPages;
+  }
+
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const paginated = items.slice(
+    start,
+    start + ITEMS_PER_PAGE
+  );
+
+
+  list.innerHTML = "";
+
+
+  if(items.length === 0){
+
+    list.innerHTML = "<p>No videos available.</p>";
+
+  }
+
+
+  // DISPLAY CARDS
+
+  for(const series of paginated){
+
+    const video = series.firstEpisode;
+
+    if(!video) continue;
+
+    const thumbnail = safeImage(video.thumbnail);
+
+    const title = escapeHtml(series.series_title);
+
+    const image = escapeHtml(thumbnail);
+
+    const id = encodeURIComponent(video.id);
+
+    const views = Number(series.total_views).toLocaleString();
+
+
+    list.innerHTML += `
+
+      <div class="card">
+
+        <a href="Watch.html?id=${id}">
+
+          <div class="thumb-container">
+
+            <img
+              class="thumb-bg"
+              src="${image}"
+              loading="lazy"
+            />
+
+            <img
+              class="thumb-main"
+              src="${image}"
+              loading="lazy"
+            />
+
+          </div>
+
+        </a>
+
+
+        <div class="meta">
+
+          <div class="title">
+            ${title}
+          </div>
+
+          <div class="views">
+            ${views} views
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+          <a href="Watch.html?id=${id}">
+            <button class="primary">Play</button>
+          </a>
+
+          <button
+            class="share-btn"
+            data-series="${escapeHtml(series.series_title)}"
+          >
+            Share
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  // SHARE BUTTON EVENTS
+
+  document.querySelectorAll(".share-btn").forEach(button => {
+
+    button.addEventListener("click",() => {
+
+      window.shareVideo(button.dataset.series);
+
+    });
+
+  });
+
+
+  // PAGINATION
+
+  pagination.innerHTML = `
+
+    <div class="pagination">
+
+      <button
+        id="prevPage"
+        ${currentPage === 1 ? "disabled" : ""}
+      >
+        ◀ Prev
+      </button>
+
+      <div class="page-info">
+        Page ${currentPage} / ${safeTotalPages}
+      </div>
+
+      <button
+        id="nextPage"
+        ${currentPage >= safeTotalPages ? "disabled" : ""}
+      >
+        Next ▶
+      </button>
+
+    </div>
+
+  `;
+
+
+  document.getElementById("prevPage").onclick = () => {
+
+    if(currentPage > 1){
+      currentPage--;
+      render(filter);
+    }
+
+  };
+
+
+  document.getElementById("nextPage").onclick = () => {
+
+    if(currentPage < safeTotalPages){
+      currentPage++;
+      render(filter);
+    }
+
+  };
+
+}
+
+
+// =====================================
+// FILTER BUTTONS
+// =====================================
+
+document.querySelectorAll(".chip").forEach(chip => {
+
+  chip.addEventListener("click",() => {
+
+    document.querySelectorAll(".chip").forEach(c => {
+      c.classList.remove("active");
+    });
+
+    chip.classList.add("active");
+
+    currentPage = 1;
+
+    render(chip.dataset.filter);
+
+  });
+
+});
+
+
+// =====================================
+// LOAD
+// =====================================
+
+fetchVideos();
+
+</script>
+
+</body>
+</html>
